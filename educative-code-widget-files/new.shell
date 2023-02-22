@@ -23,41 +23,24 @@ do
 
 done
 
-curl -s --location --request POST 'https://ed-5146363240644608.educative.run/users/signup' \
- --data-raw '{
- "Username":"Bob001", 
- "Name":"Bob_001", 
- "Email":"bob@gmail.com", 
- "Password":"Bob1234",
- "User_type":"USER"
- }' &> new.txt
- curl -s --location --request POST 'https://ed-5146363240644608.educative.run/users/signup' \
- --data-raw '{
- "Username":"Alice", 
- "Name":"Alice_001", 
- "Email":"alice@gmail.com", 
- "Password":"Alice123",
- "User_type":"ADMIN"
- }' &> new.txt
 
 printf "\nSending Request\n"
 
-
-value=$(curl -s --location --request POST 'https://ed-5146363240644608.educative.run/users/login' \
+value=$(curl -s --location --request POST 'https://localhost:9000/users/login' \
  --data-raw '{
  "Email":"bob001@gmail.com", 
  "Password":"Bob123"
  }') &> waste.txt
 
 
-token=$(echo "$value" | jq '.token')
+token=$(echo "$value" |  '.token')
 
 token1=$(echo "$token" | sed -e 's/^"//' -e 's/"$//')
 
-printf "\nSending Request\n"
-curl -s --location --request GET 'https://ed-5146363240644608.educative.run/genres/' \
+
+curl -s --location --request POST "https://localhost:9000/genres/creategenre" \
 --header "token: $token1" \
---data-raw '' | jq
-
-
+ --data-raw '{
+ "Name":"genre1"
+ }' 
 
